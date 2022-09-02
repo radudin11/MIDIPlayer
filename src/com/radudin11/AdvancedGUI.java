@@ -26,16 +26,17 @@ class AdvancedDrawPanel extends JPanel {
         blue = (int) (Math.random() * 256);
         Color endColor = new Color(red, green, blue);
 
-        GradientPaint gradient = new GradientPaint(100,100,startColor, 160,180, endColor);
+        GradientPaint gradient = new GradientPaint(100,100,startColor, 330,330, endColor);
 
         g2d.setPaint(gradient);
-        g2d.fillOval(100,100,100,100);
+        g2d.fillOval(100,100,300,300);
     }
 }
 
-public class AdvancedGUI implements ActionListener {
-    Button button;
+public class AdvancedGUI {
+
     JFrame frame;
+    JLabel label;
 
     public static void main(String args[]) throws InterruptedException {
         AdvancedGUI gui = new AdvancedGUI();
@@ -44,28 +45,35 @@ public class AdvancedGUI implements ActionListener {
 
     public void go() throws InterruptedException {
         frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         frame.setVisible(true);
         frame.setSize(700,700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        button = new Button("Change color");
 
-        button.addActionListener(this);
+        JButton labelButton = new JButton("Change Label");
+        labelButton.addActionListener(new LabelListener());
 
-        frame.add(BorderLayout.SOUTH, button);
+        JButton colorButton = new JButton("Change color");
+        colorButton.addActionListener(new ColorListener());
+
+        label = new JLabel("I'm a label");
+
+        frame.add(BorderLayout.EAST, labelButton);
+        frame.add(BorderLayout.WEST, label);
+        frame.add(BorderLayout.SOUTH, colorButton);
         frame.add(BorderLayout.CENTER,new AdvancedDrawPanel());
     }
 
-    public void actionPerformed(ActionEvent event) {
-        for(int i = 0; i < 10000; i++) {
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException ex) {
+    class ColorListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            frame.repaint();
+        }
+    }
 
-            }
-            finally {
-                frame.repaint();
-            }
+    class LabelListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            label.setText("i'm another text");
         }
     }
 }
+
